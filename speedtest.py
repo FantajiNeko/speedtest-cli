@@ -941,7 +941,7 @@ class SpeedtestResults(object):
         self.client = client or {}
 
         self._share = None
-        self.timestamp = '%sZ' % datetime.datetime.utcnow().isoformat()
+        self.timestamp = '%sZ' % datetime.datetime.now(datetime.timezone.utc).isoformat()
         self.bytes_received = 0
         self.bytes_sent = 0
 
@@ -991,7 +991,7 @@ class SpeedtestResults(object):
         ]
 
         headers = {'Referer': 'http://c.speedtest.net/flash/speedtest.swf'}
-        request = build_request('://www.speedtest.net/api/api.php',
+        request = build_request('https://www.speedtest.net/api/api.php',
                                 data='&'.join(api_data).encode(),
                                 headers=headers, secure=self._secure)
         f, e = catch_request(request, opener=self._opener)
@@ -1012,7 +1012,7 @@ class SpeedtestResults(object):
             raise ShareResultsSubmitFailure('Could not submit results to '
                                             'speedtest.net')
 
-        self._share = 'http://www.speedtest.net/result/%s.png' % resultid[0]
+        self._share = 'https://www.speedtest.net/result/%s.png' % resultid[0]
 
         return self._share
 
@@ -1132,7 +1132,7 @@ class Speedtest(object):
         headers = {}
         if gzip:
             headers['Accept-Encoding'] = 'gzip'
-        request = build_request('://www.speedtest.net/speedtest-config.php',
+        request = build_request('https://www.speedtest.net/speedtest-config.php',
                                 headers=headers, secure=self._secure)
         uh, e = catch_request(request, opener=self._opener)
         if e:
